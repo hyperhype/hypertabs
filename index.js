@@ -23,6 +23,10 @@ module.exports = function () {
     if(change !== false) d.select(name)
   }
 
+  d.has = function (name) {
+    return !!~names.indexOf(name)
+  }
+
   d.select = function (name) {
     selected = name
     var i = names.indexOf(name)
