@@ -50,6 +50,8 @@ module.exports = function () {
       d.select(names[i] || names[0])
   }
 
+  d.tabs = names
+
   return d
 }
 
