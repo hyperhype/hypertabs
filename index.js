@@ -3,11 +3,10 @@ var h = require('hyperscript')
 module.exports = function () {
 
   var names = []
-  var tabs = h('div', {style: {display: 'flex', direction: 'row'}})
-  var content = h('div')
+  var tabs = h('div.row')
+  var content = h('div.column.content')
 
-  var d = h('div.tabs',
-    {style: {display: 'flexbox', flex: 'column'}},
+  var d = h('div.tabs.column',
     tabs, content
   )
 
@@ -38,7 +37,7 @@ module.exports = function () {
     ;[].forEach.call(content.children, function (tab) {
       tab.style.display = 'none'
     })
-    content.children[i].style.display = 'block'
+    content.children[i].style.display = 'flex'
   }
 
   d.remove = function (name) {
@@ -53,6 +52,7 @@ module.exports = function () {
 
   return d
 }
+
 
 
 
