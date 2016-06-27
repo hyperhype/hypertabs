@@ -36,7 +36,7 @@ module.exports = function () {
   }
 
   d.select = function (name) {
-    selected = name
+    d.selected = selected = name
     var i = names.indexOf(name)
     if(!~i) return console.log('unknown tab:'+name + ' expected:' + JSON.stringify(names) + i)
     ;[].forEach.call(tabs.children, function (el) {
@@ -47,6 +47,11 @@ module.exports = function () {
       tab.style.display = 'none'
     })
     content.children[i].style.display = 'flex'
+    d.selectedTab = content.children[i]
+  }
+
+  d.selectRelative = function (n) {
+    d.select(names[(names.indexOf(selected) + n + names.length) % names.length])
   }
 
   d.remove = function (name) {
