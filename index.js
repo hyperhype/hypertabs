@@ -9,7 +9,7 @@ E = element. a specific part of the component
 M = modifier. something that changes an element (or block)
 */
 
-module.exports = function () {
+module.exports = function (onSelect) {
 
   var names = []
   var tabs = h('div.row.hypertabs__tabs')
@@ -48,6 +48,7 @@ module.exports = function () {
     })
     content.children[i].style.display = 'flex'
     d.selectedTab = content.children[i]
+    onSelect && onSelect(name, i)
   }
 
   d.selectRelative = function (n) {
