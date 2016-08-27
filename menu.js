@@ -30,6 +30,20 @@ function each(list, iter) {
     iter(list[i], i, list)
 }
 
+function find(list, test) {
+  for(var i = 0; i < list.length; i++)
+    if(test(list[i], i, list)) return i
+
+  return -1
+}
+
+function moveTo(el, list, i) {
+  if(!list.children.length || i >= list.children.length)
+    list.appendChild(el)
+  else
+    list.insertBefore(el, list.children[i])
+}
+
 module.exports = function (list) {
   var menu = h('ul')
 
@@ -76,22 +90,30 @@ module.exports = function (list) {
   }
 
   new MutationObserver(function (changes) {
-    changes.forEach(function (ch) {
-      if(ch.addedNodes.length) {
-        for(var i = 0; i < ch.addedNodes.length; i++)
-          menu.appendChild(tab_button(ch.addedNodes[i], onclick))
-      }
-    })
     //iterate over the list, and check that menu is in same order,
     //add any which do not exist, remove any which no longer exist.
 
     //check if a tab represented by a menu item has been removed.
     each(menu.children, function (btn) {
-      if(btn.follows.parentNode != list) menu.removeChild(btn)
+      if(btn.follows.parentNode != list) {
+        menu.removeChild(btn)
+      }
+    })
+
+    //check if each thing in the list has a tab.
+    console.log(changes, list, menu)
+    each(list.children, function (tab, i) {
+      var j
+      if(menu.children[i] && menu.children[i].follows === tab) {
+        //already set, and in correct place. do nothing
+      } else if(~(j = find(menu, function (btn) { return btn.follows === tab }))) {
+        moveTo(menu[j], list, i)
+      } else {
+        menu.appendChild(tab_button(tab))
+      }
     })
 
   }).observe(list, {childList: true})
-
   return menu
 }
 

@@ -20,12 +20,6 @@ module.exports = function (onSelect) {
   var d = h('div.hypertabs.column', Menu(content), content)
 
   d.add = function (name, tab, change) {
-    tabs.appendChild(h('div', link = h('a', name, {href: '#', onclick: function (ev) {
-      ev.preventDefault()
-      ev.stopPropagation()
-      d.select(name)
-    }})))
-
     tab.style.display = 'none'
     content.appendChild(tab)
     if(change !== false) d.select(name)
@@ -38,6 +32,7 @@ module.exports = function (onSelect) {
   d.select = function (name) {
     var prev = d.selectedTab
     d.selected = selected = name
+    return
     var i = names.indexOf(name)
     if(!~i) return console.log('unknown tab:'+name + ' expected:' + JSON.stringify(names) + i)
     ;[].forEach.call(tabs.children, function (el) {
@@ -74,6 +69,4 @@ module.exports = function (onSelect) {
 
   return d
 }
-
-
 
