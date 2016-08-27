@@ -15,57 +15,51 @@ module.exports = function (onSelect) {
 
   var names = []
   var tabs = h('div.row.hypertabs__tabs')
-  var content = h('div.column.hypertabs__content')
+  var content = h('div.row.hypertabs__content')
 
-  var d = h('div.hypertabs.column', Menu(content), content)
+  var d = h('div.hypertabs.column', Menu(content), h('div.column', content))
 
-  d.add = function (name, tab, change) {
+  d.add = function (tab, change) {
     tab.style.display = 'none'
+    var index = content.children.length
     content.appendChild(tab)
-    if(change !== false) d.select(name)
+    if(change !== false) d.select(index)
+  }
+
+  function find(name) {
+    if(Number.isInteger(name)) return content.children[name]
+
+    for(var i = 0; i < content.children.length; i++)
+      if(content.children[i].id == name) return i
+
+    return -1
   }
 
   d.has = function (name) {
-    return !!~names.indexOf(name)
+    return ~find(name)
   }
 
-  d.select = function (name) {
-    var prev = d.selectedTab
-    d.selected = selected = name
-    return
-    var i = names.indexOf(name)
-    if(!~i) return console.log('unknown tab:'+name + ' expected:' + JSON.stringify(names) + i)
-    ;[].forEach.call(tabs.children, function (el) {
-      el.classList.remove('hypertabs--selected')
-    })
-    tabs.children[i].classList.add('hypertabs--selected')
-    ;[].forEach.call(content.children, function (tab) {
-      tab.style.display = 'none'
-    })
-    var el = d.selectedTab = content.children[i]
-    if(prev && prev != el)
-      prev.dispatchEvent(new CustomEvent('blur', {target: el}))
+  d.select = function (index) {
+    if('string' === typeof index) index = find(index)
 
-    el.style.display = 'flex'
-    el.dispatchEvent(new CustomEvent('focus', {target: el}))
-    onSelect && onSelect(name, i)
+    var prev = d.selectedTab
+    d.selected = selected = index
+    ;[].forEach.call(content.children, function (tab, i) {
+      tab.style.display = i == index ? 'flex' : 'none'
+    })
+    onSelect && onSelect(index)
   }
 
   d.selectRelative = function (n) {
-    d.select(names[(names.indexOf(selected) + n + names.length) % names.length])
+    d.select(selected + n)
   }
 
-  d.remove = function (name) {
-    var i = names.indexOf(name)
-    if(!~i) return
-    names.splice(i, 1)
-    tabs.removeChild(tabs.children[i])
+  d.remove = function (i) {
+    if(i < 0 || i > content.children.length) return
     content.removeChild(content.children[i])
-    if(selected === name)
-      d.select(names[i] || names[0])
+    if(selected === i)
+      d.select(i < content.children.length ? i : 0)
   }
-
-  d.tabs = names
 
   return d
 }
