@@ -58,7 +58,7 @@ module.exports = function (list) {
       }
       ev.preventDefault()
       ev.stopPropagation()
-    }}, el.title || el.tagName)
+    }}, el.title || el.id || el.tagName)
     var rm = h('a', {href: '#', onclick: function (ev) {
       el.parentNode.removeChild(el)
       menu.removeChild(wrap)
@@ -80,7 +80,7 @@ module.exports = function (list) {
 
     new MutationObserver(function (changes) {
       if(el.title !== link.innerText)
-        link.innerText = el.title || el.tagName
+        link.innerText = el.title || el.id || el.tagName
       isSelected()
     }).observe(el, {attributes: true, attributeFilter: ['title', 'style', 'class']})
 
