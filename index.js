@@ -19,11 +19,12 @@ module.exports = function (onSelect) {
 
   var d = h('div.hypertabs.column', Menu(content), h('div.column', content))
 
-  d.add = function (tab, change) {
-    tab.style.display = 'none'
+  d.add = function (tab, change, split) {
+    console.log(tab, change, split)
+    if(!split) tab.style.display = 'none'
     var index = content.children.length
     content.appendChild(tab)
-    if(change !== false) d.select(index)
+    if(change !== false && !split) d.select(index)
   }
 
   function find(name) {
@@ -39,14 +40,24 @@ module.exports = function (onSelect) {
     return ~find(name)
   }
 
-  d.select = function (index) {
+  d.select = function (index, change, split) {
     if('string' === typeof index) index = find(index)
+
+    var max = content.children.length - 1
+    if(index > max) index = 0
+    if(index < 0) index = max
+
+    if(!change) return
 
     var prev = d.selectedTab
     d.selected = selected = index
-    ;[].forEach.call(content.children, function (tab, i) {
-      tab.style.display = i == index ? 'flex' : 'none'
-    })
+
+    if(split)
+      content.children[index].style.display = 'flex'
+    else
+      ;[].forEach.call(content.children, function (tab, i) {
+        tab.style.display = i == index ? 'flex' : 'none'
+      })
     onSelect && onSelect(index)
   }
 
@@ -63,4 +74,6 @@ module.exports = function (onSelect) {
 
   return d
 }
+
+
 
