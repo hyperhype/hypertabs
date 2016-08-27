@@ -45,7 +45,7 @@ function moveTo(el, list, i) {
 }
 
 module.exports = function (list) {
-  var menu = h('ul')
+  var menu = h('div.row.hypertabs__tabs')
 
   function tab_button (el, onclick) {
     var link = h('a', {href: '#', onclick: function (ev) {
@@ -64,7 +64,7 @@ module.exports = function (list) {
       menu.removeChild(wrap)
     }}, 'x')
 
-    var wrap = h('li', link, rm)
+    var wrap = h('div.hypertabs__tab', link, rm)
 
     function isSelected () {
       if(displayable(el))
