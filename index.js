@@ -9,23 +9,23 @@ E = element. a specific part of the component
 M = modifier. something that changes an element (or block)
 */
 
+var Menu = require('./menu')
+
 module.exports = function (onSelect) {
 
   var names = []
   var tabs = h('div.row.hypertabs__tabs')
   var content = h('div.column.hypertabs__content')
 
-  var d = h('div.hypertabs.column',
-    tabs, content
-  )
+  var d = h('div.hypertabs.column', Menu(content), content)
 
   d.add = function (name, tab, change) {
-    names.push(name)
-    tabs.appendChild(h('div', h('a', name, {href: '#', onclick: function (ev) {
+    tabs.appendChild(h('div', link = h('a', name, {href: '#', onclick: function (ev) {
       ev.preventDefault()
       ev.stopPropagation()
       d.select(name)
     }})))
+
     tab.style.display = 'none'
     content.appendChild(tab)
     if(change !== false) d.select(name)
@@ -36,6 +36,7 @@ module.exports = function (onSelect) {
   }
 
   d.select = function (name) {
+    var prev = d.selectedTab
     d.selected = selected = name
     var i = names.indexOf(name)
     if(!~i) return console.log('unknown tab:'+name + ' expected:' + JSON.stringify(names) + i)
@@ -46,8 +47,12 @@ module.exports = function (onSelect) {
     ;[].forEach.call(content.children, function (tab) {
       tab.style.display = 'none'
     })
-    content.children[i].style.display = 'flex'
-    d.selectedTab = content.children[i]
+    var el = d.selectedTab = content.children[i]
+    if(prev && prev != el)
+      prev.dispatchEvent(new CustomEvent('blur', {target: el}))
+
+    el.style.display = 'flex'
+    el.dispatchEvent(new CustomEvent('focus', {target: el}))
     onSelect && onSelect(name, i)
   }
 
@@ -69,4 +74,6 @@ module.exports = function (onSelect) {
 
   return d
 }
+
+
 
