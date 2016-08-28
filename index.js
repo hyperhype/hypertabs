@@ -15,10 +15,11 @@ var Menu = require('./menu')
 var each = u.each
 module.exports = function (onSelect) {
 
+  var d
   var names = []
   var tabs = h('div.row.hypertabs__tabs')
   var content = h('div.row.hypertabs__content')
-  var selection = tabs.selected = []
+
   function getSelection () {
     var sel = []
     each(content.children, function (tab, i) {
@@ -26,13 +27,15 @@ module.exports = function (onSelect) {
         sel.push(i)
     })
     if(''+sel === ''+selection) return
-    tabs.selected = selection = sel
+    d.selected = selection = sel
     return sel
   }
 
   var d = h('div.hypertabs.column', Menu(content, function () {
     getSelection() && onSelect && onSelect(selection)
   }), h('div.column', content))
+
+  var selection = d.selected = []
 
   d.add = function (tab, change, split) {
     if(!split) tab.style.display = 'none'
@@ -89,6 +92,9 @@ module.exports = function (onSelect) {
 
   return d
 }
+
+
+
 
 
 
