@@ -1,11 +1,14 @@
 var h = require('hyperscript')
+var u = require('./util')
+var each = u.each
+var find = u.find
 
 function displayable (el) {
   return el.style.display !== 'none'
 }
 
 function toggle_focus(el) {
-  if(el.style.display !== 'flex')
+  if(el.style.display === 'none')
     focus(el)
   else
     blur(el)
@@ -25,18 +28,6 @@ function blur (el) {
   }
 }
 
-function each(list, iter) {
-  for(var i = 0; i < list.length; i++)
-    iter(list[i], i, list)
-}
-
-function find(list, test) {
-  for(var i = 0; i < list.length; i++)
-    if(test(list[i], i, list)) return i
-
-  return -1
-}
-
 function moveTo(el, list, i) {
   if(!list.children.length || i >= list.children.length)
     list.appendChild(el)
@@ -44,8 +35,9 @@ function moveTo(el, list, i) {
     list.insertBefore(el, list.children[i])
 }
 
-module.exports = function (list) {
+module.exports = function (list, onSelect) {
   var menu = h('div.row.hypertabs__tabs')
+  var selection
 
   function tab_button (el, onclick) {
     var link = h('a', {href: '#', onclick: function (ev) {
@@ -82,6 +74,7 @@ module.exports = function (list) {
       if(el.title !== link.innerText)
         link.innerText = el.title || el.id || el.tagName
       isSelected()
+      onSelect && onSelect()
     }).observe(el, {attributes: true, attributeFilter: ['title', 'style', 'class']})
 
     isSelected()
@@ -101,7 +94,6 @@ module.exports = function (list) {
     })
 
     //check if each thing in the list has a tab.
-    console.log(changes, list, menu)
     each(list.children, function (tab, i) {
       var j
       if(menu.children[i] && menu.children[i].follows === tab) {
@@ -116,4 +108,11 @@ module.exports = function (list) {
   }).observe(list, {childList: true})
   return menu
 }
+
+
+
+
+
+
+
 

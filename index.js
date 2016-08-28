@@ -9,26 +9,41 @@ E = element. a specific part of the component
 M = modifier. something that changes an element (or block)
 */
 
+var u = require('./util')
 var Menu = require('./menu')
 
+var each = u.each
 module.exports = function (onSelect) {
 
   var names = []
   var tabs = h('div.row.hypertabs__tabs')
   var content = h('div.row.hypertabs__content')
+  var selection = tabs.selected = []
+  function getSelection () {
+    var sel = []
+    each(content.children, function (tab, i) {
+      if(tab.style.display !== 'none')
+        sel.push(i)
+    })
+    if(''+sel === ''+selection) return
+    tabs.selected = selection = sel
+    return sel
+  }
 
-  var d = h('div.hypertabs.column', Menu(content), h('div.column', content))
+  var d = h('div.hypertabs.column', Menu(content, function () {
+    getSelection() && onSelect && onSelect(selection)
+  }), h('div.column', content))
 
   d.add = function (tab, change, split) {
-    console.log(tab, change, split)
     if(!split) tab.style.display = 'none'
     var index = content.children.length
     content.appendChild(tab)
     if(change !== false && !split) d.select(index)
+    getSelection()
   }
 
   function find(name) {
-    if(Number.isInteger(name)) return content.children[name]
+    if(Number.isInteger(name)) return name // content.children[name]
 
     for(var i = 0; i < content.children.length; i++)
       if(content.children[i].id == name) return i
@@ -40,6 +55,10 @@ module.exports = function (onSelect) {
     return ~find(name)
   }
 
+  d.get = function (name) {
+    return content.children[find(name)]
+  }
+
   d.select = function (index, change, split) {
     if('string' === typeof index) index = find(index)
 
@@ -47,22 +66,18 @@ module.exports = function (onSelect) {
     if(index > max) index = 0
     if(index < 0) index = max
 
-    if(!change) return
-
-    var prev = d.selectedTab
-    d.selected = selected = index
-
     if(split)
       content.children[index].style.display = 'flex'
     else
-      ;[].forEach.call(content.children, function (tab, i) {
+      [].forEach.call(content.children, function (tab, i) {
         tab.style.display = i == index ? 'flex' : 'none'
       })
-    onSelect && onSelect(index)
+    getSelection()
   }
 
   d.selectRelative = function (n) {
-    d.select(selected + n)
+    getSelection()
+    d.select(selection[0] + n)
   }
 
   d.remove = function (i) {
@@ -74,6 +89,10 @@ module.exports = function (onSelect) {
 
   return d
 }
+
+
+
+
 
 
 
