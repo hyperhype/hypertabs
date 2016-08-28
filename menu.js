@@ -88,9 +88,7 @@ module.exports = function (list, onSelect) {
 
     //check if a tab represented by a menu item has been removed.
     each(menu.children, function (btn) {
-      if(btn.follows.parentNode != list) {
-        menu.removeChild(btn)
-      }
+      if(btn.follows.parentNode != list) menu.removeChild(btn)
     })
 
     //check if each thing in the list has a tab.
@@ -105,14 +103,12 @@ module.exports = function (list, onSelect) {
       }
     })
 
+    //check if a tab represented by a menu item has been removed.
+    each(menu.children, function (btn) {
+      if(btn.follows.parentNode != list) menu.removeChild(btn)
+    })
+
   }).observe(list, {childList: true})
   return menu
 }
-
-
-
-
-
-
-
 
