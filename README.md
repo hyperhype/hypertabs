@@ -1,4 +1,4 @@
-# tabs
+# hypertabs
 
 create a simple tabbed interface
 
@@ -10,16 +10,14 @@ var Tabs = require('hypertabs')
 
 var tabs = Tabs()
 
-tabs.add('foo', h('h1', 'foofoo'))
-tabs.add('bar', h('h1', 'baz'))
+tabs.add(h('h1', 'foofoo'))
+tabs.add(h('h1', 'baz'))
 
-
-tabs.select('bar') //change to the "bar" tab.
+tabs.select(1) //change to the "baz" tab.
 
 document.body.appendChild(tabs)
 
 ```
-
 
 ## License
 
