@@ -16,7 +16,6 @@ var each = u.each
 module.exports = function (onSelect) {
 
   var d
-  var names = []
   var tabs = h('div.row.hypertabs__tabs')
   var content = h('div.row.hypertabs__content')
 
@@ -84,20 +83,13 @@ module.exports = function (onSelect) {
   }
 
   d.remove = function (i) {
-    if(i < 0 || i > content.children.length) return
-    content.removeChild(content.children[i])
-    if(selected === i)
-      d.select(i < content.children.length ? i : 0)
+    if(Array.isArray(i)) return i.reverse().forEach(d.remove)
+    var el = d.get(i)
+    if(el) content.removeChild(d.get(i))
   }
 
   return d
 }
-
-
-
-
-
-
 
 
 
