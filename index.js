@@ -16,7 +16,6 @@ var each = u.each
 module.exports = function (onSelect) {
 
   var d
-  var tabs = h('div.row.hypertabs__tabs')
   var content = h('div.row.hypertabs__content')
 
   function getSelection () {
@@ -90,7 +89,6 @@ module.exports = function (onSelect) {
 
   return d
 }
-
 
 
 

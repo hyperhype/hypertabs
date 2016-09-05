@@ -36,11 +36,11 @@ function moveTo(el, list, i) {
 }
 
 module.exports = function (list, onSelect) {
-  var menu = h('div.row.hypertabs__tabs')
+  var menu = h('div.row.shrink.hypertabs__tabs')
   var selection
 
   function tab_button (el, onclick) {
-    var link = h('a', {href: '#', onclick: function (ev) {
+    var link = h('a.shrink.hypertabs__button', {href: '#', onclick: function (ev) {
       if(ev.shiftKey) toggle_focus(el)
       else {
         each(list.children, function (tab) {
@@ -51,23 +51,23 @@ module.exports = function (list, onSelect) {
       ev.preventDefault()
       ev.stopPropagation()
     }}, el.title || el.id || el.tagName)
-    var rm = h('a', {href: '#', onclick: function (ev) {
+    var rm = h('a.hypertabs__x', {href: '#', onclick: function (ev) {
       el.parentNode.removeChild(el)
       menu.removeChild(wrap)
     }}, 'x')
 
-    var wrap = h('div.hypertabs__tab', link, rm)
+    var wrap = h('div.hypertabs__tab.row.shrink', link, rm)
 
     function isSelected () {
       if(displayable(el))
-        link.classList.add('hypertabs--selected')
+        wrap.classList.add('hypertabs--selected')
       else
-        link.classList.remove('hypertabs--selected')
+        wrap.classList.remove('hypertabs--selected')
 
       if(el.classList.contains('hypertabs--notify')) {
-        link.classList.add('hypertabs--notify')
+        wrap.classList.add('hypertabs--notify')
       } else
-        link.classList.remove('hypertabs--notify')
+        wrap.classList.remove('hypertabs--notify')
     }
 
     new MutationObserver(function (changes) {
@@ -99,8 +99,7 @@ module.exports = function (list, onSelect) {
       } else if(~(j = find(menu, function (btn) { return btn.follows === tab }))) {
         moveTo(menu[j], list, i)
       } else {
-        menu.appendChild(tab_button(tab))
-      }
+        menu.appendChild(tab_button(tab))      }
     })
 
     //check if a tab represented by a menu item has been removed.
@@ -111,4 +110,5 @@ module.exports = function (list, onSelect) {
   }).observe(list, {childList: true})
   return menu
 }
+
 
