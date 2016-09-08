@@ -26,11 +26,12 @@ module.exports = function (onSelect) {
     })
     if(''+sel === ''+selection) return
     d.selected = selection = sel
+    if(onSelect) onSelect(selection)
     return sel
   }
 
   var d = h('div.hypertabs.column', Menu(content, function () {
-    getSelection() && onSelect && onSelect(selection)
+    getSelection()
   }), h('div.column', content))
 
   var selection = d.selected = []
@@ -89,6 +90,7 @@ module.exports = function (onSelect) {
 
   return d
 }
+
 
 
 
