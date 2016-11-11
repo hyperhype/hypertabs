@@ -84,13 +84,12 @@ function FocusClock () {
 }
 
 
-tabs.add('focus', FocusClock(), false)
+tabs.add(FocusClock(), false)
 
-
-
-
-
-
-
-
+window.onkeydown = function (ev) {
+  console.log(ev.keyCode, tabs.isFullscreen())
+  if(ev.keyCode === 70) {
+      tabs.fullscreen(!tabs.isFullscreen())
+  }
+}
 
