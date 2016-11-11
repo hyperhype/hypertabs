@@ -92,10 +92,18 @@ module.exports = function (onSelect) {
   var _display
   d.fullscreen = function (full) {
     menu.style.display = full ? 'none' : null
+    return full
+  }
+
+  d.isFullscreen = function () {
+    return menu.style.display === 'none'
   }
 
   return d
 }
+
+
+
 
 
 
