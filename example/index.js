@@ -6,7 +6,7 @@ document.head.appendChild(h('style', '.hypertabs--notify { border: 1px solid red
 document.head.appendChild(h('style', '.hypertabs__content { display: flex; flex-direction: row; }'))
 document.head.appendChild(h('style', '.hypertabs__content > * { padding: 50px; margin: auto; border: 1px solid black;}'))
 
-var tabs = require('../')()
+var tabs = TABS = require('../')()
 
 var logEvents = {
   onfocus: function (ev) {
@@ -19,8 +19,8 @@ var logEvents = {
 
 document.body.appendChild(tabs)
 
-tabs.add('foo', h('h1', logEvents, 'foo bar baz'))
-tabs.add('bar',
+tabs.add(h('h1', logEvents, 'foo bar baz'))
+tabs.add(
   h('ul',
     logEvents,
     h('li', 'foo'),
@@ -29,7 +29,7 @@ tabs.add('bar',
   )
 )
 
-tabs.add('baz',
+tabs.add(
   h('form',
     logEvents,
     h('input', {value: 'foo bar baz'}),
