@@ -30,9 +30,10 @@ module.exports = function (onSelect) {
     return sel
   }
 
-  var d = h('div.hypertabs.column', Menu(content, function () {
+  var menu = Menu(content, function () {
     getSelection()
-  }), h('div.column', content))
+  })
+  var d = h('div.hypertabs.column',  menu, h('div.column', content))
 
   var selection = d.selected = []
 
@@ -88,9 +89,13 @@ module.exports = function (onSelect) {
     if(el) content.removeChild(d.get(i))
   }
 
+  var _display
+  d.fullscreen = function (full) {
+    menu.style.display = full ? 'none' : null
+  }
+
   return d
 }
-
 
 
 
