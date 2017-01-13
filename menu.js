@@ -1,31 +1,29 @@
 var h = require('hyperscript')
 var u = require('./util')
-var each = u.each
-var find = u.find
-
-function displayable (el) {
-  return el.style.display !== 'none'
-}
+  each = u.each,
+  find = u.find,
+  isVisible = u.isVisible,
+  setVisible = u.setVisible,
+  setInvisible = u.setInvisible
 
 function toggle_focus(el) {
-  if(el.style.display === 'none')
-    focus(el)
-  else
-    blur(el)
+  isVisible(el)
+    ? blur(el)
+    : focus(el)
 }
 
 function focus(el) {
-  if(el.style.display !== 'flex') {
-    el.style.display = 'flex'
-    el.dispatchEvent(new CustomEvent('focus', {target: el}))
-  }
+  if (isVisible(el)) return
+
+  setVisible(el)
+  el.dispatchEvent(new CustomEvent('focus', {target: el}))
 }
 
 function blur (el) {
-  if(el.style.display !== 'none') {
-    el.style.display = 'none'
-    el.dispatchEvent(new CustomEvent('blur', {target: el}))
-  }
+  if (!isVisible(el)) return
+
+  setInvisible(el)
+  el.dispatchEvent(new CustomEvent('blur', {target: el}))
 }
 
 function moveTo(el, list, i) {
@@ -59,7 +57,7 @@ module.exports = function (list, onSelect) {
     var wrap = h('div.hypertabs__tab.row.shrink', link, rm)
 
     function isSelected () {
-      if(displayable(el))
+      if(isVisible(el))
         wrap.classList.add('hypertabs--selected')
       else
         wrap.classList.remove('hypertabs--selected')

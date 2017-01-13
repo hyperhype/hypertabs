@@ -9,10 +9,14 @@ E = element. a specific part of the component
 M = modifier. something that changes an element (or block)
 */
 
-var u = require('./util')
+var u = require('./util'),
+  each = u.each,
+  isVisible = u.isVisible,
+  setVisible = u.setVisible,
+  setInvisible = u.setInvisible
+
 var Menu = require('./menu')
 
-var each = u.each
 module.exports = function (onSelect) {
 
   var d
@@ -21,7 +25,7 @@ module.exports = function (onSelect) {
   function getSelection () {
     var sel = []
     each(content.children, function (tab, i) {
-      if(tab.style.display !== 'none')
+      if(isVisible(tab))
         sel.push(i)
     })
     if(''+sel === ''+selection) return
@@ -33,12 +37,15 @@ module.exports = function (onSelect) {
   var menu = Menu(content, function () {
     getSelection()
   })
-  var d = h('div.hypertabs.column',  menu, h('div.column', content))
+  var d = h('div.hypertabs.column',  [
+    menu,
+    h('div.column', content)
+  ])
 
   var selection = d.selected = []
 
   d.add = function (tab, change, split) {
-    if(!split) tab.style.display = 'none'
+    if(!split) setInvisible(tab)
     var index = content.children.length
     content.appendChild(tab)
     if(change !== false && !split) d.select(index)
@@ -73,7 +80,7 @@ module.exports = function (onSelect) {
       content.children[index].style.display = 'flex'
     else
       [].forEach.call(content.children, function (tab, i) {
-        tab.style.display = i == index ? 'flex' : 'none'
+        i == index ? setVisible(tab) : setInvisible(tab)
       })
     getSelection()
   }
@@ -101,9 +108,4 @@ module.exports = function (onSelect) {
 
   return d
 }
-
-
-
-
-
 
