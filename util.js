@@ -23,14 +23,19 @@ function isVisible(el) {
   return el.style.visibility !== 'hidden'
 }
 
+function setInvisible(el) {
+  //store scroll position in data-attribute
+  el.dataset.scrollTop = el.scrollTop
+
+  el.style.visibility = 'hidden'
+  el.style.position = 'absolute'
+}
+
 function setVisible(el) {
   el.style.visibility = 'visible'
   el.style.position = 'inherit'
-}
 
-
-function setInvisible(el) {
-  el.style.visibility = 'hidden'
-  el.style.position = 'absolute'
+  // restore scroll position from data-attribute
+  el.scrollTop = el.dataset.scrollTop 
 }
 
