@@ -1,7 +1,7 @@
 {
   "name": "hypertabs",
   "description": "tabbed interface with hyperscript",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "homepage": "https://github.com/dominictarr/hypertabs",
   "repository": {
     "type": "git",
