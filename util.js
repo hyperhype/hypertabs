@@ -24,6 +24,8 @@ function isVisible(el) {
 }
 
 function setInvisible(el) {
+  if (el.style.visibility === 'hidden') return 
+
   //store scroll position in data-attribute
   el.dataset.scrollTop = el.scrollTop
 
