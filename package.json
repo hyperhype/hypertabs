@@ -10,9 +10,12 @@
   "dependencies": {
     "hyperscript": "^1.4.7"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "micro-css": "^0.6.2"
+  },
   "scripts": {
-    "test": "set -e; for t in test/*.js; do node $t; done"
+    "test": "set -e; for t in test/*.js; do node $t; done",
+    "build-template": "node lib/generate_css_template.js"
   },
   "author": "Dominic Tarr <dominic.tarr@gmail.com> (http://dominictarr.com)",
   "maintainers": [

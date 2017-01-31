@@ -1,0 +1,25 @@
+Hypertabs {
+  nav {
+    section.tabs {
+      div.tab {
+        -selected {
+        }
+
+        -notify{
+        }
+
+        a.link {
+        }
+
+        a.close {
+        }
+      }
+    }
+  }
+
+  section.content {
+    div.page {
+    }
+  }
+}
+

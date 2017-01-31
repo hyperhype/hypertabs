@@ -4,54 +4,12 @@
 //
 
 var h = require('hyperscript')
+var fs = require('fs')
+var microCss = require('micro-css')
 
-var styles = h('style', `
-  div.Hypertabs {
-    display: flex;
-    flex-direction: column
-  }
-
-  div.Hypertabs > nav { 
-    display: flex;
-  }
-
-  div.Hypertabs > nav > section.tabs { 
-    flex-grow: 1;
-
-    display: flex;
-  }
-
-  div.Hypertabs > nav > section.tabs > div.tab { 
-    flex-grow: 1;
-
-    display: flex;
-    padding: 5px;
-    border: 1px gainsboro solid;
-  }
-  div.Hypertabs > nav > section.tabs > div.tab.-selected {
-    background-color: cyan;
-  }
-  div.Hypertabs > nav > section.tabs > div.tab.-notify {
-    background-color: yellow;
-  }
-
-  div.Hypertabs > nav > section.tabs > div.tab > a.link {
-    flex-grow: 1;
-  }
-  div.Hypertabs > nav > section.tabs > div.tab > a.close {}
-
-
-  div.Hypertabs > section.content {
-    display: flex;
-  }
-  div.Hypertabs > section.content > div.page {
-    flex-grow: 1;
-
-    padding: 1rem;
-    border: 1px gainsboro solid;
-  }
-`)
-
+var mcss = fs.readFileSync(__filename.replace('index.js', 'styles.mcss'), 'utf8')
+var styles = h('style', microCss(mcss))
+fs.writeFile(__filename.replace('index.js', 'styles.css'), microCss(mcss).toString())
 document.head.appendChild(styles)
 
 

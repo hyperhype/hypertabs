@@ -1,6 +1,6 @@
 var h = require('hyperscript')
 
-var u = require('./util'),
+var u = require('./lib/util'),
   each = u.each,
   isVisible = u.isVisible,
   setVisible = u.setVisible,
@@ -10,7 +10,7 @@ var Tabs = require('./tabs')
 
 module.exports = function (onSelect) {
 
-  var content = h('section.content')
+  var content = h('section', { className: '.content' })
   var tabs = Tabs(content, function () { getSelection() })
   var d = h('div.Hypertabs', [
     h('nav', tabs),
@@ -32,7 +32,7 @@ module.exports = function (onSelect) {
   var selection = d.selected = []
 
   d.add = function (el, change, split) {
-    var page = h('div.page', el)
+    var page = h('div', { className: '.page' },  el)
 
     if(!split) setInvisible(page)
     var index = content.children.length

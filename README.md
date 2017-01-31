@@ -25,46 +25,51 @@ setTimeout(
 
 ## Styling
 
-Hypertabs classes take inspiration from [micro-css](https://github.com/mmckegg/micro-css) where styling is super tightly specified using `>` - direct child only to ensure your styling don't leak.
+Hypertabs follows a class pattern that is compatible with [micro-css](https://github.com/mmckegg/micro-css) where styling is super tightly specified using the direct child only `>` and non-standard class prefixes to stop you from writing bad styles.
 
-In nesting, the box schema looks like this :
+Your style schema for mcss is like:
 
-```
-div.Hypertabs {
+```css
+Hypertabs {
   nav {
-    section.tabs {  // this is deliberatly nested to enable injection of other content
-      div.tab {     // may also have .-selected or .-notify
-        a.link {}
-        a.close {}
+    section.tabs {
+      div.tab {
+        -selected {
+        }
+
+        -notify{
+        }
+
+        a.link {
+        }
+
+        a.close {
+        }
       }
     }
   }
+
   section.content {
     div.page {
-
     }
   }
 }
-``
-
-So in tight css : 
 ```
-div.Hypertabs { }
 
-div.Hypertabs > nav { }
+In classic css, use a the following schema as a template:
+```css
+.Hypertabs {  }
 
-div.Hypertabs > nav > section.tabs { }
+.Hypertabs > nav {  }
+.Hypertabs > nav > section.\.tabs {  }
+.Hypertabs > nav > section.\.tabs > div.\.tab {  }
+.Hypertabs > nav > section.\.tabs > div.\.tab.-selected {  }
+.Hypertabs > nav > section.\.tabs > div.\.tab.-notify {  }
+.Hypertabs > nav > section.\.tabs > div.\.tab > a.\.link {  }
+.Hypertabs > nav > section.\.tabs > div.\.tab > a.\.close {  }
 
-div.Hypertabs > nav > section.tabs > div.tab { }
-div.Hypertabs > nav > section.tabs > div.tab.-selected { }
-div.Hypertabs > nav > section.tabs > div.tab.-notify { }
-
-div.Hypertabs > nav > section.tabs > div.tab > a.link {}
-div.Hypertabs > nav > section.tabs > div.tab > a.close {}
-
-
-div.Hypertabs > section.content { }
-div.Hypertabs > section.content > div.page { }
+.Hypertabs > section.\.content {  }
+.Hypertabs > section.\.content > div.\.page {  }
 ```
 
 
