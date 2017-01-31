@@ -11,16 +11,16 @@ var Tabs = require('./tabs')
 module.exports = function (onSelect) {
 
   var content = h('section.content')
-  var tabsNav = Tabs(content, function () { getSelection() })
+  var tabs = Tabs(content, function () { getSelection() })
   var d = h('div.Hypertabs', [
-    h('nav', tabsNav),
+    h('nav', tabs),
     content
   ])
 
   function getSelection () {
     var sel = []
-    each(content.children, function (section, i) {
-      if(isVisible(section))
+    each(content.children, function (page, i) {
+      if(isVisible(page))
         sel.push(i)
     })
     if(''+sel === ''+selection) return
@@ -31,8 +31,8 @@ module.exports = function (onSelect) {
 
   var selection = d.selected = []
 
-  d.add = function (section, change, split) {
-    var page = h('div.page', section)
+  d.add = function (el, change, split) {
+    var page = h('div.page', el)
 
     if(!split) setInvisible(page)
     var index = content.children.length
@@ -68,8 +68,8 @@ module.exports = function (onSelect) {
     if(split)
       content.children[index].style.display = 'flex'
     else
-      [].forEach.call(content.children, function (section, i) {
-        i == index ? setVisible(section) : setInvisible(section)
+      [].forEach.call(content.children, function (page, i) {
+        i == index ? setVisible(page) : setInvisible(page)
       })
     getSelection()
   }
@@ -87,12 +87,12 @@ module.exports = function (onSelect) {
 
   var _display
   d.fullscreen = function (full) {
-    tabsNav.style.display = full ? 'none' : null
+    tabs.style.display = full ? 'none' : null
     return full
   }
 
   d.isFullscreen = function () {
-    return tabsNav.style.display === 'none'
+    return tabs.style.display === 'none'
   }
 
   return d
