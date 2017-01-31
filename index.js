@@ -1,31 +1,26 @@
 var h = require('hyperscript')
 
-/*
-element classes are set with BEM convention.
-https://css-tricks.com/bem-101/
-
-B = block. module name, on the top level of the component.
-E = element. a specific part of the component
-M = modifier. something that changes an element (or block)
-*/
-
 var u = require('./util'),
   each = u.each,
   isVisible = u.isVisible,
   setVisible = u.setVisible,
   setInvisible = u.setInvisible
 
-var Menu = require('./menu')
+var Tabs = require('./tabs')
 
 module.exports = function (onSelect) {
 
-  var d
-  var content = h('div.row.hypertabs__content')
+  var content = h('section.content')
+  var tabsNav = Tabs(content, function () { getSelection() })
+  var d = h('div.Hypertabs', [
+    h('nav', tabsNav),
+    content
+  ])
 
   function getSelection () {
     var sel = []
-    each(content.children, function (tab, i) {
-      if(isVisible(tab))
+    each(content.children, function (section, i) {
+      if(isVisible(section))
         sel.push(i)
     })
     if(''+sel === ''+selection) return
@@ -34,20 +29,14 @@ module.exports = function (onSelect) {
     return sel
   }
 
-  var menu = Menu(content, function () {
-    getSelection()
-  })
-  var d = h('div.hypertabs.column',  [
-    menu,
-    h('div.column', content)
-  ])
-
   var selection = d.selected = []
 
-  d.add = function (tab, change, split) {
-    if(!split) setInvisible(tab)
+  d.add = function (section, change, split) {
+    var page = h('div.page', section)
+
+    if(!split) setInvisible(page)
     var index = content.children.length
-    content.appendChild(tab)
+    content.appendChild(page)
     if(change !== false && !split) d.select(index)
     getSelection()
   }
@@ -79,8 +68,8 @@ module.exports = function (onSelect) {
     if(split)
       content.children[index].style.display = 'flex'
     else
-      [].forEach.call(content.children, function (tab, i) {
-        i == index ? setVisible(tab) : setInvisible(tab)
+      [].forEach.call(content.children, function (section, i) {
+        i == index ? setVisible(section) : setInvisible(section)
       })
     getSelection()
   }
@@ -98,12 +87,12 @@ module.exports = function (onSelect) {
 
   var _display
   d.fullscreen = function (full) {
-    menu.style.display = full ? 'none' : null
+    tabsNav.style.display = full ? 'none' : null
     return full
   }
 
   d.isFullscreen = function () {
-    return menu.style.display === 'none'
+    return tabsNav.style.display === 'none'
   }
 
   return d
