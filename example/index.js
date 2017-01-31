@@ -68,7 +68,8 @@ var logEvents = {
 
 document.body.appendChild(tabs)
 
-tabs.add(h('h1', logEvents, 'foo bar baz'))
+var opts = Object.assign({}, logEvents, { title: 'A trifle' })
+tabs.add(h('h1', opts, 'foo bar baz'))
 
 tabs.add(
   h('ul', logEvents, [
@@ -125,7 +126,9 @@ function FocusClock () {
       focusTime = Date.now() - focusStart
       focused = false
     }
-  })
+  },
+  'CLOCK'
+  )
 }
 
 

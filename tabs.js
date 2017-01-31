@@ -6,115 +6,130 @@ var u = require('./util')
   setVisible = u.setVisible,
   setInvisible = u.setInvisible
 
-function toggle_focus(el) {
-  isVisible(el)
-    ? blur(el)
-    : focus(el)
+function toggle_focus(page) {
+  isVisible(page)
+    ? blur(page)
+    : focus(page)
 }
 
-function focus(el) {
-  if (isVisible(el)) return
+function focus(page) {
+  if (isVisible(page)) return
 
-  setVisible(el)
+  setVisible(page)
+  var el = page.firstChild
   el.dispatchEvent(new CustomEvent('focus', {target: el}))
 }
 
-function blur (el) {
-  if (!isVisible(el)) return
+function blur (page) {
+  if (!isVisible(page)) return
 
-  setInvisible(el)
+  setInvisible(page)
+  var el = page.firstChild
   el.dispatchEvent(new CustomEvent('blur', {target: el}))
 }
 
-function moveTo(el, content, i) {
+function moveTo(page, content, i) {
   if(!content.children.length || i >= content.children.length)
-    content.appendChild(el)
+    content.appendChild(page)
   else
-    content.insertBefore(el, content.children[i])
+    content.insertBefore(page, content.children[i])
 }
 
 module.exports = function (content, onSelect) {
-  var menu = h('section.tabs')
+  var tabs = h('section.tabs')
   var selection
 
-  function build_tab (el, onclick) {
+  function build_tab (page) {
     var link = h('a.link', {
       href: '#',
       onclick: function (ev) {
-        if(ev.shiftKey) toggle_focus(el)
+        if(ev.shiftKey) toggle_focus(page)
         else {
-          each(content.children, function (tab) {
-            if(tab == el) focus(tab)
-            else blur(tab)
+          each(content.children, function (_page) {
+            if(_page == page) focus(_page)
+            else blur(_page)
           })
         }
         ev.preventDefault()
         ev.stopPropagation()
       }},
-      el.title || el.id || el.tagName
+      getTitle(page)
     )
     var rm = h('a.close', {
       href: '#',
       onclick: function (ev) {
-        el.parentNode.removeChild(el)
-        menu.removeChild(tab)
+        page.parentNode.removeChild(page)
+        tabs.removeChild(tab)
       }},
       'x'
     )
 
     var tab = h('div.tab', link, rm)
 
-    function isSelected () {
-      if(isVisible(el))
+    function updateTabClasses () {
+      if(isVisible(page))
         tab.classList.add('-selected')
       else
         tab.classList.remove('-selected')
 
-      if(el.classList.contains('-notify'))
+      if(page.classList.contains('-notify'))
         tab.classList.add('-notify')
       else
         tab.classList.remove('-notify')
     }
 
-    new MutationObserver(function (changes) {
-      if(el.title !== link.innerText)
-        link.innerText = el.title || el.id || el.tagName
-      isSelected()
-      onSelect && onSelect()
-    }).observe(el, {attributes: true, attributeFilter: ['title', 'style', 'class']})
+    function getTitle(page) {
+      var el = page.firstChild
+      return el.title || el.id || el.tagName
+    }
 
-    isSelected()
-    tab.follows = el
+    new MutationObserver(function (changes) {
+      if(page.title !== link.innerText)
+        link.innerText = getTitle(page) 
+      updateTabClasses()
+      onSelect && onSelect()
+    }).observe(page, {attributes: true, attributeFilter: ['title', 'style', 'class']})
+
+    new MutationObserver(function (changes) {
+      if(page.title !== link.innerText)
+        link.innerText = getTitle(page) 
+      updateTabClasses()
+      onSelect && onSelect()
+    }).observe(page.firstChild, {attributes: true, attributeFilter: ['title', 'style', 'class']})
+
+    updateTabClasses()
+    tab.follows = page
     return tab
   }
 
   new MutationObserver(function (changes) {
-    //iterate over the content, and check that menu is in same order,
+    //iterate over the content, and check that tabs is in same order,
     //add any which do not exist, remove any which no longer exist.
 
-    //check if a tab represented by a menu item has been removed.
-    each(menu.children, function (btn) {
-      if(btn.follows.parentNode != content) menu.removeChild(btn)
+    //check if a tab represented by a tabs item has been removed.
+    each(tabs.children, function (tab) {
+      if(tab.follows.parentNode != content) tabs.removeChild(tab)
     })
 
     //check if each thing in the content has a tab.
-    each(content.children, function (tab, i) {
+    each(content.children, function (page, i) {
       var j
-      if(menu.children[i] && menu.children[i].follows === tab) {
+      if(tabs.children[i] && tabs.children[i].follows === tab) {
         //already set, and in correct place. do nothing
-      } else if(~(j = find(menu, function (btn) { return btn.follows === tab }))) {
-        moveTo(menu[j], content, i)
+      } else if(~(j = find(tabs, function (tab) { return tab.follows === tab }))) {
+        moveTo(tabs[j], content, i)
       } else {
-        menu.appendChild(build_tab(tab))      }
+        tabs.appendChild(build_tab(page))
+      }
     })
 
-    //check if a tab represented by a menu item has been removed.
-    each(menu.children, function (btn) {
-      if(btn.follows.parentNode != content) menu.removeChild(btn)
+    //check if a tab represented by a tabs item has been removed.
+    each(tabs.children, function (tab) {
+      if(tab.follows.parentNode != content) tabs.removeChild(tab)
     })
 
   }).observe(content, {childList: true})
-  return menu
+  return tabs
 }
 
 
