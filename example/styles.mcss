@@ -21,6 +21,10 @@ Hypertabs {
           background-color: cyan;
         }
 
+        -notify {
+          background-color: orange;
+        }
+
         a.link {
           flex-grow: 1
         }

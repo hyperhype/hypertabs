@@ -3,6 +3,7 @@
 .Hypertabs > nav > section.\.tabs { flex-grow: 1; display: flex; }
 .Hypertabs > nav > section.\.tabs > div.\.tab { flex-grow: 1; display: flex; padding: 5px; border: 1px gainsboro solid; }
 .Hypertabs > nav > section.\.tabs > div.\.tab.-selected { background-color: cyan; }
+.Hypertabs > nav > section.\.tabs > div.\.tab.-notify { background-color: orange; }
 .Hypertabs > nav > section.\.tabs > div.\.tab > a.\.link { flex-grow: 1; }
 .Hypertabs > section.\.content { display: flex; }
 .Hypertabs > section.\.content > div.\.page { flex-grow: 1; padding: 1rem; border: 1px gainsboro solid; }

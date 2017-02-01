@@ -23,6 +23,22 @@ setTimeout(
 )
 ```
 
+## Notifications
+
+Hypertabs wraps content you give it in a `div.page`.
+It watches for whether there is a `-notify` class on this element, and keeps this class in sync with the appropriate tab.
+In this way, you can signal updates to a page that is not currently selected.
+
+```js
+var welcomeTab = tabs.add(h('h1', 'Welcome!'))
+var welcomePage = welcomeTab.page
+
+welcomePage.classList.add('-notify')
+
+welcomeTab.classList.constain('-notify')
+// -> true
+```
+
 ## Styling
 
 Hypertabs follows a class pattern that is compatible with [micro-css](https://github.com/mmckegg/micro-css) where styling is super tightly specified using the direct child only `>` and non-standard class prefixes to stop you from writing bad styles.

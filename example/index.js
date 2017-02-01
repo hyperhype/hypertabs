@@ -44,18 +44,41 @@ tabs.add(
   ])
 )
 
+var clockTab = tabs.add(FocusClock(), false)
+// clockTab.follows === the page element that wraps the clock
+
 function FocusClock () {
-  var clock
   var blurStart = Date.now()
   var focusStart, focused = false
   var focusTime, blurTime
+  var page
+  var clock = h('div', {
+    onfocus: function () {
+      focusStart = Date.now()
+      focused = true
+      blurTime = Date.now() - blurStart
+      update()
+      page.classList.remove('-notify')
+    },
+    onblur: function () {
+      blurStart = Date.now()
+      focusTime = Date.now() - focusStart
+      focused = false
+    }
+  },
+  'CLOCK'
+  )
 
   function update () {
-    var t = 'focus('+(focused ? 'focused' : 'blurred')+')'
-    if(clock.title != t) clock.title = t
+    page = clock.parentNode
 
-    if(Date.now() - blurStart > 1000 && !focused && !clock.classList.contains('-notify')) {
-      clock.classList.add('-notify')
+    var t = focused
+      ? 'focus(focused)'
+      : 'focus(blurred)'
+    if(page.title != t) page.title = t
+
+    if(Date.now() - blurStart > 1000 && !focused && !page.classList.contains('-notify')) {
+      page.classList.add('-notify')
     }
 
     if(!focused) return
@@ -71,26 +94,9 @@ function FocusClock () {
 
   setInterval(update, 100)
 
-  return clock = h('div', {
-    onfocus: function () {
-      focusStart = Date.now()
-      focused = true
-      blurTime = Date.now() - blurStart
-      update()
-      clock.classList.remove('-notify')
-    },
-    onblur: function () {
-      blurStart = Date.now()
-      focusTime = Date.now() - focusStart
-      focused = false
-    }
-  },
-  'CLOCK'
-  )
+  return clock
 }
 
-
-tabs.add(FocusClock(), false)
 
 window.onkeydown = function (ev) {
   console.log(ev.keyCode, tabs.isFullscreen())

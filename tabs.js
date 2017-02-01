@@ -89,20 +89,13 @@ module.exports = function (content, onSelect) {
 
     new MutationObserver(function (changes) {
       if(page.title !== link.innerText)
-        link.innerText = getTitle(page) 
+        link.innerText = getTitle(page)
       updateTabClasses()
       onSelect && onSelect()
     }).observe(page, {attributes: true, attributeFilter: ['title', 'style', 'class']})
 
-    new MutationObserver(function (changes) {
-      if(page.title !== link.innerText)
-        link.innerText = getTitle(page) 
-      updateTabClasses()
-      onSelect && onSelect()
-    }).observe(page.firstChild, {attributes: true, attributeFilter: ['title', 'style', 'class']})
-
     updateTabClasses()
-    tab.follows = page
+    tab.page = page
     return tab
   }
 
@@ -110,28 +103,22 @@ module.exports = function (content, onSelect) {
     //iterate over the content, and check that tabs is in same order,
     //add any which do not exist, remove any which no longer exist.
 
-    //check if a tab represented by a tabs item has been removed.
+    //check if a page represented by a tab has been removed.
     each(tabs.children, function (tab) {
-      if(tab.follows.parentNode != content) tabs.removeChild(tab)
+      if(tab.page.parentNode != content) tabs.removeChild(tab)
     })
 
-    //check if each thing in the content has a tab.
+    //check if each page in the content has a tab.
     each(content.children, function (page, i) {
       var j
-      if(tabs.children[i] && tabs.children[i].follows === tab) {
+      if(tabs.children[i] && tabs.children[i].page === page) {
         //already set, and in correct place. do nothing
-      } else if(~(j = find(tabs, function (tab) { return tab.follows === tab }))) {
+      } else if(~(j = find(tabs, function (tab) { return tab.page === page }))) {
         moveTo(tabs[j], content, i)
       } else {
         tabs.appendChild(build_tab(page))
       }
     })
-
-    //check if a tab represented by a tabs item has been removed.
-    each(tabs.children, function (tab) {
-      if(tab.follows.parentNode != content) tabs.removeChild(tab)
-    })
-
   }).observe(content, {childList: true})
   return tabs
 }

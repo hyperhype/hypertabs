@@ -1,5 +1,4 @@
 var h = require('hyperscript')
-
 var u = require('./lib/util'),
   each = u.each,
   isVisible = u.isVisible,
@@ -39,6 +38,8 @@ module.exports = function (onSelect) {
     content.appendChild(page)
     if(change !== false && !split) d.select(index)
     getSelection()
+
+    return page
   }
 
   function find(name) {
