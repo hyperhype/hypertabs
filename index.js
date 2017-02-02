@@ -32,6 +32,7 @@ module.exports = function (onSelect) {
 
   d.add = function (el, change, split) {
     var page = h('div', { className: '.page' },  el)
+    page.content = el
 
     if(!split) setInvisible(page)
     var index = content.children.length
@@ -42,21 +43,26 @@ module.exports = function (onSelect) {
     return page
   }
 
-  function find(name) {
-    if(Number.isInteger(name)) return name // content.children[name]
+  function find (name) {
+    if(Number.isInteger(name)) return name
 
     for(var i = 0; i < content.children.length; i++)
-      if(content.children[i].id == name) return i
+      if(page(i).content.id == name) return i
 
     return -1
+  }
+
+  function page (index) {
+    return content.children[index]
   }
 
   d.has = function (name) {
     return ~find(name)
   }
 
+  // getPage
   d.get = function (name) {
-    return content.children[find(name)]
+    return page(find(name))
   }
 
   d.select = function (index, change, split) {
@@ -67,7 +73,7 @@ module.exports = function (onSelect) {
     if(index < 0) index = max
 
     if(split)
-      content.children[index].style.display = 'flex'
+      page(index).style.display = 'flex'
     else
       [].forEach.call(content.children, function (page, i) {
         i == index ? setVisible(page) : setInvisible(page)
