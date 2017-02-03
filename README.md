@@ -23,6 +23,10 @@ setTimeout(
 )
 ```
 
+When you call add, this creates a new tab, and it creates a page which contains the element you've provided.
+By default hypertabs assumes that the page size will be fixed and any scrolling will be done on the element you've provided (this is important if you care about preserving scroll position jumping between tabs).
+```
+
 ## Notifications
 
 Hypertabs wraps content you give it in a `div.page`.
