@@ -1,31 +1,25 @@
 var h = require('hyperscript')
-
-/*
-element classes are set with BEM convention.
-https://css-tricks.com/bem-101/
-
-B = block. module name, on the top level of the component.
-E = element. a specific part of the component
-M = modifier. something that changes an element (or block)
-*/
-
-var u = require('./util'),
+var u = require('./lib/util'),
   each = u.each,
   isVisible = u.isVisible,
   setVisible = u.setVisible,
   setInvisible = u.setInvisible
 
-var Menu = require('./menu')
+var Tabs = require('./tabs')
 
 module.exports = function (onSelect) {
 
-  var d
-  var content = h('div.row.hypertabs__content')
+  var content = h('section', { className: '.content' })
+  var tabs = Tabs(content, function () { getSelection() })
+  var d = h('div.Hypertabs', [
+    h('nav', tabs),
+    content
+  ])
 
   function getSelection () {
     var sel = []
-    each(content.children, function (tab, i) {
-      if(isVisible(tab))
+    each(content.children, function (page, i) {
+      if(isVisible(page))
         sel.push(i)
     })
     if(''+sel === ''+selection) return
@@ -34,39 +28,41 @@ module.exports = function (onSelect) {
     return sel
   }
 
-  var menu = Menu(content, function () {
-    getSelection()
-  })
-  var d = h('div.hypertabs.column',  [
-    menu,
-    h('div.column', content)
-  ])
-
   var selection = d.selected = []
 
-  d.add = function (tab, change, split) {
-    if(!split) setInvisible(tab)
+  d.add = function (el, change, split) {
+    var page = h('div', { className: '.page' },  el)
+    page.content = el
+
+    if(!split) setInvisible(page)
     var index = content.children.length
-    content.appendChild(tab)
+    content.appendChild(page)
     if(change !== false && !split) d.select(index)
     getSelection()
+
+    return page
   }
 
-  function find(name) {
-    if(Number.isInteger(name)) return name // content.children[name]
+  function find (name) {
+    if(Number.isInteger(name)) return name
 
     for(var i = 0; i < content.children.length; i++)
-      if(content.children[i].id == name) return i
+      if(page(i).content.id == name) return i
 
     return -1
+  }
+
+  function page (index) {
+    return content.children[index]
   }
 
   d.has = function (name) {
     return ~find(name)
   }
 
+  // getPage
   d.get = function (name) {
-    return content.children[find(name)]
+    return page(find(name))
   }
 
   d.select = function (index, change, split) {
@@ -77,10 +73,10 @@ module.exports = function (onSelect) {
     if(index < 0) index = max
 
     if(split)
-      content.children[index].style.display = 'flex'
+      page(index).style.display = 'flex'
     else
-      [].forEach.call(content.children, function (tab, i) {
-        i == index ? setVisible(tab) : setInvisible(tab)
+      [].forEach.call(content.children, function (page, i) {
+        i == index ? setVisible(page) : setInvisible(page)
       })
     getSelection()
   }
@@ -98,12 +94,12 @@ module.exports = function (onSelect) {
 
   var _display
   d.fullscreen = function (full) {
-    menu.style.display = full ? 'none' : null
+    tabs.style.display = full ? 'none' : null
     return full
   }
 
   d.isFullscreen = function () {
-    return menu.style.display === 'none'
+    return tabs.style.display === 'none'
   }
 
   return d

@@ -1,0 +1,16 @@
+.Hypertabs { position: absolute; top: 0; bottom: 0; right: 0; left: 0; overflow-y: hidden; display: flex; flex-direction: column; height: 100% /* needed to stop scroller blowing out */; }
+.Hypertabs > section.\.content { display: flex; height: 100% /* needed to stop making nav weird */; }
+.Hypertabs > section.\.content > div.\.page > * { overflow-y: auto; padding: 1rem; }
+.Hypertabs > section.\.content > div.\.page { flex-grow: 1; display: flex /*hack to get give Scroller context it needs */; padding-top: .2rem; }
+.Hypertabs > nav { display: flex; background: linear-gradient(to bottom, #efefef, #e5e5e5); }
+.Hypertabs > nav > section.\.tabs { flex-grow: 1; display: flex; min-width: 0; }
+.Hypertabs > nav > section.\.tabs > div.\.tab { flex-grow: 1; display: flex; align-items: center; justify-content: space-between; font-size: .9rem; background-color: #efefef; overflow-x: hidden; padding: 0 .4rem; margin-left: .6rem; border: 1px gainsboro solid; border-bottom: none; }
+.Hypertabs > nav > section.\.tabs > div.\.tab.-selected { color: #222; background-color: #fff; }
+.Hypertabs > nav > section.\.tabs > div.\.tab.-selected > a.\.close { visibility: visible; }
+.Hypertabs > nav > section.\.tabs > div.\.tab.-notify { background-color: orange; }
+.Hypertabs > nav > section.\.tabs > div.\.tab > a { color: #666; }
+.Hypertabs > nav > section.\.tabs > div.\.tab > a:hover { color: #0088cc; text-decoration: none; }
+.Hypertabs > nav > section.\.tabs > div.\.tab > a.\.link { flex-grow: 1; flex-shrink: 0; overflow-x: hidden; min-width: 0; max-width: 90%; white-space: nowrap; text-overflow: ellipsis; }
+.Hypertabs > nav > section.\.tabs > div.\.tab > a.\.close { visibility: hidden; }
+.Hypertabs > nav > div.\.extra { display: flex; align-items: center; }
+body { font-size: 30px; }
