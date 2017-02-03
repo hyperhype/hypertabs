@@ -71,6 +71,7 @@ Hypertabs {
 
   section.content {
     div.page {
+      *  // this is the element whos scroll position will be preserved
     }
   }
 }
@@ -92,6 +93,7 @@ In classic css, use a the following schema as a template:
 .Hypertabs > section.\.content > div.\.page {  }
 ```
 
+Getting scrolling of pages working can be a bit challenging with styling. The setup from an app which implements hypertabs can be found for both hortizontal and vertical formats in `./example`.
 
 ## License
 

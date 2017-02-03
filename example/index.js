@@ -1,20 +1,18 @@
 //
-// run : electro example/index.js
-//
+// Easy testing: 
+// $ npm install electro -g
+// $ electro example/index.js
 //
 
 var h = require('hyperscript')
 var fs = require('fs')
 var microCss = require('micro-css')
-
-// var mcss = fs.readFileSync(__filename.replace('index.js', 'styles.mcss'), 'utf8')
-var mcss = fs.readFileSync(__filename.replace('index.js', 'styles.vertical.mcss'), 'utf8')
-var styles = h('style', microCss(mcss))
-fs.writeFile(__filename.replace('index.js', 'styles.css'), microCss(mcss).toString())
-document.head.appendChild(styles)
-
-
 var tabs = TABS = require('../')()
+
+// document.head.appendChild(build_style_tag('styles.mcss'))
+document.head.appendChild(build_style_tag('styles.vertical.mcss'))
+
+var article = fs.readFileSync(__filename.replace('index.js', 'article.txt'), 'utf8')
 
 var logEvents = {
   onfocus: function (ev) {
@@ -45,21 +43,28 @@ tabs.add(
   ])
 )
 
-var clockTab = tabs.add(FocusClock(), false)
-// clockTab.follows === the page element that wraps the clock
+var opts2 = Object.assign({}, logEvents, { title: 'Hyperspace (science fiction)' })
+tabs.add(
+  h('div', opts2, [
+    article.split('\n').map(para => h('p', para))
+  ])
+)
+
+var clockPage = tabs.add(FocusClock(), false)
+// clockPage.content === the clock we asked to be added
 
 function FocusClock () {
   var blurStart = Date.now()
   var focusStart, focused = false
   var focusTime, blurTime
-  var page
+
   var clock = h('div', {
     onfocus: function () {
       focusStart = Date.now()
       focused = true
       blurTime = Date.now() - blurStart
       update()
-      page.classList.remove('-notify')
+      clock.parentNode.classList.remove('-notify')
     },
     onblur: function () {
       blurStart = Date.now()
@@ -71,7 +76,7 @@ function FocusClock () {
   )
 
   function update () {
-    page = clock.parentNode
+    var page = clock.parentNode
 
     var t = focused
       ? 'focus(focused)'
@@ -104,5 +109,16 @@ window.onkeydown = function (ev) {
   if(ev.keyCode === 70) {
     tabs.fullscreen(!tabs.isFullscreen())
   }
+}
+
+function build_style_tag (filename) {
+  var mcss = fs.readFileSync(__filename.replace('index.js', filename), 'utf8')
+  var css = microCss(mcss)
+
+  // side effect - write a css copy for friends!
+  var cssFilename = filename.replace('mcss', 'css')
+  fs.writeFile(__filename.replace('index.js', cssFilename), css)
+
+  return h('style', css)
 }
 
