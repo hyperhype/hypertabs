@@ -9,7 +9,7 @@ var Tabs = require('./tabs')
 
 module.exports = function (onSelect) {
 
-  var content = h('section', { className: '.content' })
+  var content = h('section.content')
   var tabs = Tabs(content, function () { getSelection() })
   var d = h('div.Hypertabs', [
     h('nav', tabs),
@@ -31,7 +31,7 @@ module.exports = function (onSelect) {
   var selection = d.selected = []
 
   d.add = function (el, change, split) {
-    var page = h('div', { className: '.page' },  el)
+    var page = h('div.page', el)
     page.content = el
 
     if(!split) setInvisible(page)

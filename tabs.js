@@ -36,12 +36,11 @@ function moveTo(page, content, i) {
 }
 
 module.exports = function (content, onSelect) {
-  var tabs = h('section', { className: '.tabs' })
+  var tabs = h('section.tabs')
   var selection
 
   function build_tab (page) {
-    var link = h('a', {
-      className: '.link',
+    var link = h('a.link', {
       href: '#',
       onclick: function (ev) {
         if(ev.shiftKey) toggle_focus(page)
@@ -56,8 +55,7 @@ module.exports = function (content, onSelect) {
       }},
       getTitle(page)
     )
-    var rm = h('a', {
-      className: '.close',
+    var rm = h('a.close', {
       href: '#',
       onclick: function (ev) {
         page.parentNode.removeChild(page)
@@ -66,7 +64,7 @@ module.exports = function (content, onSelect) {
       'x'
     )
 
-    var tab = h('div', { className: '.tab' } , [
+    var tab = h('div.tab', [
       link, rm
     ])
 
