@@ -1,10 +1,10 @@
 .Hypertabs {  }
 .Hypertabs > nav {  }
-.Hypertabs > nav > section.\.tabs {  }
-.Hypertabs > nav > section.\.tabs > div.\.tab {  }
-.Hypertabs > nav > section.\.tabs > div.\.tab.-selected {  }
-.Hypertabs > nav > section.\.tabs > div.\.tab.-notify {  }
-.Hypertabs > nav > section.\.tabs > div.\.tab > a.\.link {  }
-.Hypertabs > nav > section.\.tabs > div.\.tab > a.\.close {  }
-.Hypertabs > section.\.content {  }
-.Hypertabs > section.\.content > div.\.page {  }
+.Hypertabs > nav > section.tabs {  }
+.Hypertabs > nav > section.tabs > div.tab {  }
+.Hypertabs > nav > section.tabs > div.tab.-selected {  }
+.Hypertabs > nav > section.tabs > div.tab.-notify {  }
+.Hypertabs > nav > section.tabs > div.tab > a.link {  }
+.Hypertabs > nav > section.tabs > div.tab > a.close {  }
+.Hypertabs > section.content {  }
+.Hypertabs > section.content > div.page {  }

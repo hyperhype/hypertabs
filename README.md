@@ -82,15 +82,15 @@ In classic css, use a the following schema as a template:
 .Hypertabs {  }
 
 .Hypertabs > nav {  }
-.Hypertabs > nav > section.\.tabs {  }
-.Hypertabs > nav > section.\.tabs > div.\.tab {  }
-.Hypertabs > nav > section.\.tabs > div.\.tab.-selected {  }
-.Hypertabs > nav > section.\.tabs > div.\.tab.-notify {  }
-.Hypertabs > nav > section.\.tabs > div.\.tab > a.\.link {  }
-.Hypertabs > nav > section.\.tabs > div.\.tab > a.\.close {  }
+.Hypertabs > nav > section.tabs {  }
+.Hypertabs > nav > section.tabs > div.tab {  }
+.Hypertabs > nav > section.tabs > div.tab.-selected {  }
+.Hypertabs > nav > section.tabs > div.tab.-notify {  }
+.Hypertabs > nav > section.tabs > div.tab > a.link {  }
+.Hypertabs > nav > section.tabs > div.tab > a.close {  }
 
-.Hypertabs > section.\.content {  }
-.Hypertabs > section.\.content > div.\.page {  }
+.Hypertabs > section.content {  }
+.Hypertabs > section.content > div.page {  }
 ```
 
 Getting scrolling of pages working can be a bit challenging with styling. The setup from an app which implements hypertabs can be found for both hortizontal and vertical formats in `./example`.
