@@ -5,7 +5,6 @@ create a simple tabbed interface
 ## Example
 
 ``` js
-
 var Tabs = require('hypertabs')
 
 var tabs = Tabs()
@@ -41,6 +40,15 @@ welcomePage.classList.add('-notify')
 welcomeTab.classList.constain('-notify')
 // -> true
 ```
+
+## Adding more to yor nav bar
+
+Hypertabs takes an optional second argument which allows you to easily prepend or append node to the tabs nav-bar.
+
+```js
+var tabs = Tabs(onSelected, { prepend: status, append: aBurger })
+```
+
 
 ## Styling
 

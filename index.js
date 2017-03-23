@@ -7,12 +7,17 @@ var u = require('./lib/util'),
 
 var Tabs = require('./tabs')
 
-module.exports = function (onSelect) {
+module.exports = function (onSelect, opts) {
+  if (!opts) opts = {}
 
   var content = h('section.content')
   var tabs = Tabs(content, function () { getSelection() })
   var d = h('div.Hypertabs', [
-    h('nav', tabs),
+    h('nav', [
+      opts.prepend,
+      tabs,
+      opts.append
+    ]),
     content
   ])
 
