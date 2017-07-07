@@ -37,7 +37,7 @@ var welcomePage = welcomeTab.page
 
 welcomePage.classList.add('-notify')
 
-welcomeTab.classList.constain('-notify')
+welcomeTab.classList.contains('-notify')
 // -> true
 ```
 
