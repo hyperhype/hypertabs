@@ -35,7 +35,7 @@ function moveTo(page, content, i) {
     content.insertBefore(page, content.children[i])
 }
 
-module.exports = function (content, onSelect) {
+module.exports = function (content, onSelect, onClose) {
   var tabs = h('section.tabs')
   var selection
 
@@ -43,6 +43,9 @@ module.exports = function (content, onSelect) {
     var link = h('a.link', {
       href: '#',
       onclick: function (ev) {
+        ev.preventDefault()
+        ev.stopPropagation()
+
         if(ev.shiftKey) toggle_focus(page)
         else {
           each(content.children, function (_page) {
@@ -50,16 +53,18 @@ module.exports = function (content, onSelect) {
             else blur(_page)
           })
         }
-        ev.preventDefault()
-        ev.stopPropagation()
       }},
       getTitle(page)
     )
     var rm = h('a.close', {
       href: '#',
       onclick: function (ev) {
+        ev.preventDefault()
+        ev.stopPropagation()
+
         page.parentNode.removeChild(page)
         tabs.removeChild(tab)
+        onClose && onClose(page.firstChild)
       }},
       'x'
     )

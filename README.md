@@ -25,6 +25,37 @@ setTimeout(
 When you call add, this creates a new tab, and it creates a page which contains the element you've provided.
 By default hypertabs assumes that the page size will be fixed and any scrolling will be done on the element you've provided (this is important if you care about preserving scroll position jumping between tabs).
 
+## API
+
+### `Tabs(opts)`
+
+Instantiates a tabs setup. `opts` is an optional _object_ which can contain any of the following keys:
+
+- `onSelect` - a callback function that is called when a tab is selected (called with ...)
+- `onClose` - a callback function that is called when a tab is closed (called with the page element being closed)
+- `prepend` - an html element which is prepended before your tabs in the 'tab nav'
+- `append` - an html element which is appended after your tabs in the 'tab nav'
+
+### `tab#add(page)`
+
+Adds a new page and makes an associated tab for it
+
+
+### `tab#remove`
+
+### `tab#has`
+
+### `tab#get`
+
+### `tab#select`
+
+### `tab#selectRelative`
+
+### `tab#fullscreen`
+
+### `tab#isFullscreen`
+
+
 ## Notifications
 
 Hypertabs wraps content you give it in a `div.page`.

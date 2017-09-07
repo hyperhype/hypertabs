@@ -7,11 +7,11 @@ var u = require('./lib/util'),
 
 var Tabs = require('./tabs')
 
-module.exports = function (onSelect, opts) {
+module.exports = function (opts) {
   if (!opts) opts = {}
 
   var content = h('section.content')
-  var tabs = Tabs(content, function () { getSelection() })
+  var tabs = Tabs(content, function () { getSelection() }, opts.onClose)
   var d = h('div.Hypertabs', [
     h('nav', [
       opts.prepend,
@@ -29,7 +29,7 @@ module.exports = function (onSelect, opts) {
     })
     if(''+sel === ''+selection) return
     d.selected = selection = sel
-    if(onSelect) onSelect(selection)
+    if(opts.onSelect) opts.onSelect(selection)
     return sel
   }
 
@@ -94,7 +94,8 @@ module.exports = function (onSelect, opts) {
   d.remove = function (i) {
     if(Array.isArray(i)) return i.reverse().forEach(d.remove)
     var el = d.get(i)
-    if(el) content.removeChild(d.get(i))
+    opts.onClose && opts.onClose(el.firstChild)
+    if(el) content.removeChild(el)
   }
 
   var _display
