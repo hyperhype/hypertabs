@@ -40,6 +40,12 @@ module.exports = function (content, onSelect, onClose) {
   var selection
 
   function build_tab (page) {
+    function close () {
+      page.parentNode.removeChild(page)
+      tabs.removeChild(tab)
+      onClose && onClose(page.firstChild)
+    }
+
     var link = h('a.link', {
       href: '#',
       onclick: function (ev) {
@@ -58,10 +64,7 @@ module.exports = function (content, onSelect, onClose) {
         if(ev.which && ev.which === 2) {
           ev.preventDefault()
           ev.stopPropagation()
-
-          page.parentNode.removeChild(page)
-          tabs.removeChild(tab)
-          onClose && onClose(page.firstChild)
+          close()
         }
       }},
       getTitle(page)
@@ -71,10 +74,7 @@ module.exports = function (content, onSelect, onClose) {
       onclick: function (ev) {
         ev.preventDefault()
         ev.stopPropagation()
-
-        page.parentNode.removeChild(page)
-        tabs.removeChild(tab)
-        onClose && onClose(page.firstChild)
+        close()
       }},
       'x'
     )
@@ -135,5 +135,7 @@ module.exports = function (content, onSelect, onClose) {
   }).observe(content, {childList: true})
   return tabs
 }
+
+
 
 
