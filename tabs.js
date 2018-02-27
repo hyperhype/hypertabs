@@ -53,6 +53,16 @@ module.exports = function (content, onSelect, onClose) {
             else blur(_page)
           })
         }
+      },
+      onauxclick: function (ev) {
+        if(ev.which && ev.which === 2) {
+          ev.preventDefault()
+          ev.stopPropagation()
+
+          page.parentNode.removeChild(page)
+          tabs.removeChild(tab)
+          onClose && onClose(page.firstChild)
+        }
       }},
       getTitle(page)
     )
