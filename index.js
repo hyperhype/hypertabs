@@ -11,7 +11,11 @@ module.exports = function (opts) {
   if (!opts) opts = {}
 
   var content = h('section.content')
-  var tabs = Tabs(content, function () { getSelection() }, opts.onClose)
+  var tabs = Tabs(content, {
+    onClick: opts.onClick,
+    onSelect: function () { getSelection() },
+    onClose: opts.onClose
+  })
   var d = h('div.Hypertabs', [
     h('nav', [
       opts.prepend,

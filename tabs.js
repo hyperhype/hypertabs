@@ -1,10 +1,10 @@
 var h = require('hyperscript')
 var u = require('./lib/util')
-  each = u.each,
-  find = u.find,
-  isVisible = u.isVisible,
-  setVisible = u.setVisible,
-  setInvisible = u.setInvisible
+var each = u.each
+var find = u.find
+var isVisible = u.isVisible
+var setVisible = u.setVisible
+var setInvisible = u.setInvisible
 
 function toggle_focus(page) {
   isVisible(page)
@@ -35,7 +35,8 @@ function moveTo(page, content, i) {
     content.insertBefore(page, content.children[i])
 }
 
-module.exports = function (content, onSelect, onClose) {
+module.exports = function (content, opts) {
+  opts = opts || {}
   var tabs = h('section.tabs')
   var selection
 
@@ -43,12 +44,17 @@ module.exports = function (content, onSelect, onClose) {
     function close () {
       page.parentNode.removeChild(page)
       tabs.removeChild(tab)
-      onClose && onClose(page.firstChild)
+      opts.onClose && opts.onClose(page.firstChild)
     }
 
     var link = h('a.link', {
       href: '#',
       onclick: function (ev) {
+        if (opts.onClick) {
+          opts.onClick(ev, page)
+          return
+        }
+
         ev.preventDefault()
         ev.stopPropagation()
 
@@ -104,7 +110,7 @@ module.exports = function (content, onSelect, onClose) {
       if(page.title !== link.innerText)
         link.innerText = getTitle(page)
       updateTabClasses()
-      onSelect && onSelect()
+      opts.onSelect && opts.onSelect()
     }).observe(page, {attributes: true, attributeFilter: ['title', 'style', 'class']})
 
     updateTabClasses()
