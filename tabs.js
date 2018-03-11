@@ -50,8 +50,8 @@ module.exports = function (content, opts) {
     var link = h('a.link', {
       href: '#',
       onclick: function (ev) {
-        if (opts.onClick) {
-          opts.onClick(ev, page)
+        if (opts.onClickOverride) {
+          opts.onClickOverride(ev, page)
           return
         }
 

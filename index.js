@@ -12,7 +12,7 @@ module.exports = function (opts) {
 
   var content = h('section.content')
   var tabs = Tabs(content, {
-    onClick: opts.onClick,
+    onClickOverride: opts.onClickOverride,
     onSelect: function () { getSelection() },
     onClose: opts.onClose
   })
