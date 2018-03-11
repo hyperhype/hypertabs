@@ -6,13 +6,13 @@ var isVisible = u.isVisible
 var setVisible = u.setVisible
 var setInvisible = u.setInvisible
 
-function toggle_focus(page) {
+function toggle_focus (page) {
   isVisible(page)
     ? blur(page)
     : focus(page)
 }
 
-function focus(page) {
+function focus (page) {
   if (isVisible(page)) return
 
   setVisible(page)
@@ -28,7 +28,7 @@ function blur (page) {
   el.dispatchEvent(new CustomEvent('blur', {target: el}))
 }
 
-function moveTo(page, content, i) {
+function moveTo (page, content, i) {
   if(!content.children.length || i >= content.children.length)
     content.appendChild(page)
   else
@@ -38,20 +38,22 @@ function moveTo(page, content, i) {
 module.exports = function (content, opts) {
   opts = opts || {}
   var tabs = h('section.tabs')
-  var selection
 
   function build_tab (page) {
-    function close () {
+    function close (ev) {
+      ev.preventDefault()
+      ev.stopPropagation()
+
       page.parentNode.removeChild(page)
       tabs.removeChild(tab)
-      opts.onClose && opts.onClose(page.firstChild)
+      opts.onCloseHook && opts.onCloseHook(page.firstChild)
     }
 
     var link = h('a.link', {
       href: '#',
       onclick: function (ev) {
-        if (opts.onClickOverride) {
-          opts.onClickOverride(ev, page)
+        if (opts.onClickLink) {
+          opts.onClickLink(ev, page, content)
           return
         }
 
@@ -65,23 +67,24 @@ module.exports = function (content, opts) {
             else blur(_page)
           })
         }
+        opts.onSelectHook && opts.onSelectHook()
       },
       onauxclick: function (ev) {
-        if(ev.which && ev.which === 2) {
-          ev.preventDefault()
-          ev.stopPropagation()
-          close()
-        }
+        if(ev.which && ev.which === 2) close(ev)
       }},
       getTitle(page)
     )
     var rm = h('a.close', {
       href: '#',
       onclick: function (ev) {
-        ev.preventDefault()
-        ev.stopPropagation()
-        close()
-      }},
+        if (opts.onClickClose) {
+          opts.onClickClose(ev, page, content)
+          return
+        }
+
+        close(ev)
+      }
+    },
       'x'
     )
 
@@ -110,7 +113,6 @@ module.exports = function (content, opts) {
       if(page.title !== link.innerText)
         link.innerText = getTitle(page)
       updateTabClasses()
-      opts.onSelect && opts.onSelect()
     }).observe(page, {attributes: true, attributeFilter: ['title', 'style', 'class']})
 
     updateTabClasses()
@@ -139,9 +141,6 @@ module.exports = function (content, opts) {
       }
     })
   }).observe(content, {childList: true})
+
   return tabs
 }
-
-
-
-
