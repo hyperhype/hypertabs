@@ -11,7 +11,12 @@ module.exports = function (opts) {
   if (!opts) opts = {}
 
   var content = h('section.content')
-  var tabs = Tabs(content, function () { getSelection() }, opts.onClose)
+  var tabs = Tabs(content, {
+    onClickLink: opts.onClickLink,
+    onClickClose: opts.onClickClose,
+    onSelectHook: onSelectHook,
+    onCloseHook: opts.onCloseHook
+  })
   var d = h('div.Hypertabs', [
     h('nav', [
       opts.prepend,
@@ -21,7 +26,7 @@ module.exports = function (opts) {
     content
   ])
 
-  function getSelection () {
+  function onSelectHook () {
     var sel = []
     each(content.children, function (page, i) {
       if(isVisible(page))
@@ -29,8 +34,8 @@ module.exports = function (opts) {
     })
     if(''+sel === ''+selection) return
     d.selected = selection = sel
-    if(opts.onSelect) opts.onSelect(selection)
-    return sel
+
+    if(opts.onSelectHook) opts.onSelectHook(selection)
   }
 
   var selection = d.selected = []
@@ -43,7 +48,6 @@ module.exports = function (opts) {
     var index = content.children.length
     content.appendChild(page)
     if(change !== false && !split) d.select(index)
-    getSelection()
 
     return page
   }
@@ -83,22 +87,20 @@ module.exports = function (opts) {
       [].forEach.call(content.children, function (page, i) {
         i == index ? setVisible(page) : setInvisible(page)
       })
-    getSelection()
+    onSelectHook()
   }
 
   d.selectRelative = function (n) {
-    getSelection()
     d.select(selection[0] + n)
   }
 
   d.remove = function (i) {
     if(Array.isArray(i)) return i.reverse().forEach(d.remove)
     var el = d.get(i)
-    opts.onClose && opts.onClose(el.firstChild)
+    opts.onCloseHook && opts.onCloseHook(el.firstChild)
     if(el) content.removeChild(el)
   }
 
-  var _display
   d.fullscreen = function (full) {
     tabs.style.display = full ? 'none' : null
     return full
@@ -110,4 +112,3 @@ module.exports = function (opts) {
 
   return d
 }
-

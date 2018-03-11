@@ -31,8 +31,9 @@ By default hypertabs assumes that the page size will be fixed and any scrolling 
 
 Instantiates a tabs setup. `opts` is an optional _object_ which can contain any of the following keys:
 
-- `onSelect` - a callback function that is called when a tab is selected (called with ...)
-- `onClose` - a callback function that is called when a tab is closed (called with the page element being closed)
+- `onSelectHook` - a callback function that is called when a tab is selected (called with ...)
+- `onCloseHook` - a callback function that is called when a tab is closed (called with the page element being closed)
+- `onClick` - a callback function
 - `prepend` - an html element which is prepended before your tabs in the 'tab nav'
 - `append` - an html element which is appended after your tabs in the 'tab nav'
 
