@@ -94,8 +94,10 @@ module.exports = function (opts) {
   d.remove = function (i) {
     if(Array.isArray(i)) return i.reverse().forEach(d.remove)
     var el = d.get(i)
-    opts.onClose && opts.onClose(el.firstChild)
-    if(el) content.removeChild(el)
+    if(el) {
+      content.removeChild(el)
+      opts.onClose && opts.onClose(el.firstChild)
+    }
   }
 
   var _display
