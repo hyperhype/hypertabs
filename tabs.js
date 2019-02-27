@@ -101,11 +101,14 @@ module.exports = function (content, onSelect, onClose) {
     }
 
     new MutationObserver(function (changes) {
-      if(page.title !== link.innerText)
-        link.innerText = getTitle(page)
+      if(getTitle(page) !== link.innerText) link.innerText = getTitle(page)
       updateTabClasses()
       onSelect && onSelect()
     }).observe(page, {attributes: true, attributeFilter: ['title', 'style', 'class']})
+
+    new MutationObserver(function (changes) {
+      if(getTitle(page) !== link.innerText) link.innerText = getTitle(page)
+    }).observe(page.firstChild, {attributes: true, attributeFilter: ['title']})
 
     updateTabClasses()
     tab.page = page
